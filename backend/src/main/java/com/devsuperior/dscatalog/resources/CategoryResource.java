@@ -1,14 +1,15 @@
 package com.devsuperior.dscatalog.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsuperior.dscatalog.entities.Category;
+import com.devsuperior.dscatalog.services.CategoryService;
 
 /* RestControlller = Configuração de anotação para usar algo que já está implementado (Efetua um
 pré processamento ao compilar esta classe) economiza tempo. 
@@ -19,14 +20,27 @@ pré processamento ao compilar esta classe) economiza tempo.
 @RestController
 @RequestMapping(value = "/categories") // colocar no padrão plural (rota)
 public class CategoryResource { // Esta é uma classe que pertence o recurso da entidade.
-
-	//	Endpoint
-
+	
+	@Autowired    // para injetar o mecanismo automaticamente
+	private CategoryService service;
+	
+	
+	
+	//Endpoint
+	
 	@GetMapping    //Configura o endpoint
 	public ResponseEntity<List<Category>> findAll() { 
-		List<Category> list = new ArrayList<>();
+		
+		/*List<Category> list = new ArrayList<>();
+		
 		list.add(new Category(1L, "Books"));
 		list.add(new Category(2L, "Electonics"));
+		*/
+		
+		// troca pela lista do banco de dados
+		
+		List<Category> list = service.findAll();
+		
 
 		return ResponseEntity.ok().body(list);
 	}
