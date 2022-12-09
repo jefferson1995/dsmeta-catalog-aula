@@ -12,6 +12,7 @@ import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.services.CategoryService;
 
+// Controladores REST
 /* RestControlller = Configuração de anotação para usar algo que já está implementado (Efetua um
 pré processamento ao compilar esta classe) economiza tempo. 
 */

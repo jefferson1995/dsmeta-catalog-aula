@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.devsuperior.dscatalog.entities.Category;
 
+// CAMADA DE ACESSO A DADOS
 //Camada chamada de acesso a dados
 
 // JPAREPOSITORY É UM TIPO GENERICO E É PRECISO PASSAR DOIS PARAMENTROS tipo da entidade e o id

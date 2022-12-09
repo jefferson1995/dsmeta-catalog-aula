@@ -12,6 +12,8 @@ import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 
+// CAMADA DE SERVIÇO
+
 /* Service = essa anotação vai registrar a classe como um componente que vai participar do sistema de injeção
  * de dependencia automaziada do spring, ou seja, faz o gerenciamento das instancias das dependências dos objetos CategoryService
  * vai ser o spring, ele faz o genrenciamento 

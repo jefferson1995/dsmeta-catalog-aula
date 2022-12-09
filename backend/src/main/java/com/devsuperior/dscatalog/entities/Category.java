@@ -8,11 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+// CAMADA ENTIDADE
 
 //Serializable: Padrão da linguagem java para que o objeto java possa ser convertido em byte, 
 //para o objeto ser gravado em arquivos e passar nas redes.) 
 
-// Entity = 
+/* Entity =
+ *  é utilizada para informar que uma classe também é uma entidade. A partir disso,
+ *   a JPA estabelecerá a ligação entre a entidade e uma tabela de mesmo nome no banco de dados,
+ *   onde os dados de objetos desse tipo poderão ser persistidos. 
+ */
 // Table = marcação para criar o nome da tabela.
 
 @Entity
