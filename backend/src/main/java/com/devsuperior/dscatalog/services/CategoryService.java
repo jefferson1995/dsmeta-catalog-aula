@@ -1,7 +1,7 @@
 package com.devsuperior.dscatalog.services;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
 
 // CAMADA DE SERVIÇO
 
@@ -55,5 +56,13 @@ public class CategoryService {
 		}
 		*/
 		
+	}
+
+	@Transactional(readOnly= true)
+	public CategoryDTO findById(Long id) {
+		Optional<Category> obj = repository.findById(id);  // Optional é uma abordagem para evitar trabalhar com o valor nulo
+		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Nenhum id encontrado"));  //Retorna o objeto que estava dentro do option
+		// orElse procura o objeto, mas se não encontrar ele dispara a exception
+		return new CategoryDTO(entity);
 	}
 }
