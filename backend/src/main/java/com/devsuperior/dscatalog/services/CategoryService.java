@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
-import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
+import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 // CAMADA DE SERVIÇO
 
@@ -61,7 +63,7 @@ public class CategoryService {
 	@Transactional(readOnly= true)
 	public CategoryDTO findById(Long id) {
 		Optional<Category> obj = repository.findById(id);  // Optional é uma abordagem para evitar trabalhar com o valor nulo
-		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Nenhum id encontrado"));  //Retorna o objeto que estava dentro do option
+		Category entity = obj.orElseThrow(() -> new ResourceNotFoundException("Nenhum id encontrado"));  //Retorna o objeto que estava dentro do option
 		// orElse procura o objeto, mas se não encontrar ele dispara a exception
 		return new CategoryDTO(entity);
 	}
@@ -74,5 +76,19 @@ public class CategoryService {
 		entity.setName(dto.getName());    // inseri o nome e a categoryDTO pega o nome que foi inserido
 		entity = repository.save(entity);   // Precisa retornar para classe Category o que foi adicionado. 
 		return new CategoryDTO(entity);  // retorna uma CategoryDTO passado como parametro a nova classe Category 
+	}
+
+	@Transactional
+	public CategoryDTO update(Long id, CategoryDTO dto) {
+		try {
+		Category entity = repository.getOne(id);  // Ele não toca no banco de dados, instacia um objeto provisório com os dados e o id, quando clica em salvar ele toca o banco de dados 
+		entity.setName(dto.getName());
+		entity = repository.save(entity);
+		
+		return new CategoryDTO(entity);
+		}catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("id não encontrado" + id);
+		}
+	
 	} 
 }
