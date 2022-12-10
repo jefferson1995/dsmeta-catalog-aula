@@ -65,4 +65,14 @@ public class CategoryService {
 		// orElse procura o objeto, mas se não encontrar ele dispara a exception
 		return new CategoryDTO(entity);
 	}
+	
+	//Método para salvar uma nova categoria no banco de dados
+	@Transactional
+	public CategoryDTO insert(CategoryDTO dto) {
+		
+		Category entity = new Category();  // instancia a categoria 
+		entity.setName(dto.getName());    // inseri o nome e a categoryDTO pega o nome que foi inserido
+		entity = repository.save(entity);   // Precisa retornar para classe Category o que foi adicionado. 
+		return new CategoryDTO(entity);  // retorna uma CategoryDTO passado como parametro a nova classe Category 
+	} 
 }
