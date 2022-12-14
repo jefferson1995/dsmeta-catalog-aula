@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,9 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 
 		return ResponseEntity.ok().body(list);
 	}
+	
+	
+	
 
 	//Método para retornar consulta quando informa o id
 	
@@ -59,6 +63,9 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 
 		return ResponseEntity.ok().body(dto);
 	}
+	
+	
+	
 	
 	//Método para Inserir novos dados
 	
@@ -71,15 +78,25 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 		return ResponseEntity.created(uri).body(dto);
 	}
 	
+	
+	
 	//Método para atualizar os dados
 	
 	@PutMapping(value = "/{id}")  //método indepotente
 	public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody CategoryDTO dto){
 		dto = service.update(id, dto);
-	
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
-		
 		return ResponseEntity.ok().body(dto);
+	}
+	
+	
+	
+	//Método para deletar os dados
+	
+	@DeleteMapping(value = "/{id}")  //método indepotente
+	public ResponseEntity<CategoryDTO> delete(@PathVariable Long id){
+		service.delete(id);
+	
+		return ResponseEntity.noContent().build();    // Não é preciso passar um body, retorna um 204 informando que foi concluido(não em corpo na resposta). 
 	}
 }
 

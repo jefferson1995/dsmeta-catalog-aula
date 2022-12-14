@@ -1,12 +1,16 @@
 package com.devsuperior.dscatalog.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 // CAMADA ENTIDADE
 
@@ -20,27 +24,39 @@ import javax.persistence.Table;
  */
 // Table = marcação para criar o nome da tabela.
 
+
+
 @Entity
 @Table(name = "tb_category")
 public class Category implements Serializable {
-	/**
-	* 
-	*/
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)     //  está marcação implementa o id automaticamente       //
 	private Long id;
 	private String name;
+	
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")  // adiciona no banco o momento exato no UTC
+	private Instant createdAt;
+	
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") 
+	private Instant updateAt;
 
+	
+	
+	//construtor sem argumentos
 	public Category() {
 
 	}
-
+	
+	
+   //Construtor com argumentos
 	public Category(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
+		
+		
 	}
 
 	public Long getId() {
@@ -58,9 +74,35 @@ public class Category implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
 
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+	
+	public Instant getUpdateAt() {
+		return updateAt;
+	}
+	
+	//Método para atualizar juntos o updateAt e createdAt - anotação @PrePersist para executar a ação
+	
+	@PrePersist    // anotação h2
+	public void prePersist() {
+		createdAt = Instant.now();
+	}
+	@PreUpdate
+	public void preUpdate() {
+		updateAt = Instant.now();
+	}
+	
+	
+	
+	
 	// Método padrão que todo objeto pode ter em java, para comparar se um objeto é
 	// igual a outro (Compara se os números são iguais).
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -68,6 +110,8 @@ public class Category implements Serializable {
 
 	// Método de comparação que qualquer objeto java pode ter, precisão de
 	// comparação 100%.
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

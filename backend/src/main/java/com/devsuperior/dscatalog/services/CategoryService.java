@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 // CAMADA DE SERVIÇO
@@ -60,6 +63,7 @@ public class CategoryService {
 		
 	}
 
+	//Método para buscar os dados
 	@Transactional(readOnly= true)
 	public CategoryDTO findById(Long id) {
 		Optional<Category> obj = repository.findById(id);  // Optional é uma abordagem para evitar trabalhar com o valor nulo
@@ -67,6 +71,8 @@ public class CategoryService {
 		// orElse procura o objeto, mas se não encontrar ele dispara a exception
 		return new CategoryDTO(entity);
 	}
+	
+	
 	
 	//Método para salvar uma nova categoria no banco de dados
 	@Transactional
@@ -78,6 +84,8 @@ public class CategoryService {
 		return new CategoryDTO(entity);  // retorna uma CategoryDTO passado como parametro a nova classe Category 
 	}
 
+	
+	//Método para atualizar os dados
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
 		try {
@@ -90,5 +98,17 @@ public class CategoryService {
 			throw new ResourceNotFoundException("id não encontrado" + id);
 		}
 	
+	}
+
+	//método para excluir os dados
+	public void delete(Long id) {
+		try {
+		repository.deleteById(id);
+		}catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Id não encontrado" + id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DatabaseException("Violação de integridade");
+		}
 	} 
 }
