@@ -4,6 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -35,7 +39,17 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 	// Endpoint
 
 	@GetMapping // Configura o endpoint
-	public ResponseEntity<List<CategoryDTO>> findAll() {
+	public ResponseEntity<Page<CategoryDTO>> findAll(
+			// parametros para paginar a requisição
+			@RequestParam(value = "page", defaultValue = "0") Integer page,                   //Nº das paginas
+			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage, //quantidade de registros por paginas
+			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy,          //ordernar a busca
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction			//ascendente 
+			
+			
+			) {
+		
+			PageRequest pageRequest = PageRequest.of(page, linesPerPage,Direction.valueOf(direction), orderBy);
 
 		/*
 		 * List<Category> list = new ArrayList<>();
@@ -46,7 +60,9 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 
 		// troca pela lista do banco de dados
 
-		List<CategoryDTO> list = service.findAll();
+		//List<CategoryDTO> list = service.findAll(); Desativado para usar o page
+			
+			Page<CategoryDTO> list = service.findAllPaged(pageRequest);
 
 		return ResponseEntity.ok().body(list);
 	}
@@ -57,7 +73,7 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 	//Método para retornar consulta quando informa o id
 	
 	@GetMapping(value = "/{id}")  // Esse id irá ser adicionado na rota básica "/categories"
-	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) { // Não irá mais retornar uma lista (@PathVariable) para reconhecer o id
+	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) { // Não irá mais retornar uma lista (@PathVariable) para reconhecer o id (Passa na url o parametro) usando quando obrigatório
 		
 		CategoryDTO dto = service.findById(id);
 

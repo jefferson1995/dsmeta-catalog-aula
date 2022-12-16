@@ -1,6 +1,5 @@
 package com.devsuperior.dscatalog.services;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -9,6 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +37,10 @@ public class CategoryService {
 	private CategoryRepository repository;   // Com essas configurações o spring trata de injetar uma dependencia valida para CategoryRepository
 	
 	@Transactional(readOnly= true)    // tem a garantia da transação, se faz tudo ou não faz nada, evita lock no banco e melhora a performance (readOnly)
-	public List<CategoryDTO> findAll(){  
-		List<Category> list =  repository.findAll();  // acessa o repositório e guarda todas informações dentro da lista do tipo Category
+	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest){  
+		//List<Category> list =  repository.findAll();  // acessa o repositório e guarda todas informações dentro da lista do tipo Category (Desativado para usar o page)
 		
+		Page<Category> list =  repository.findAll(pageRequest);  // faz a busca paginada
 		/*
 		 * criado uma nova lista para guardar os dados
 		 * For each para percorrer a lista category e adicionar dentro da nova lista dto e já passar como parametro
@@ -50,8 +52,10 @@ public class CategoryService {
 		 * map = transforma cada elemento original em outra coisa, aplica a funcão a cada elemento da lista
 		 */
 		
-		return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList()); // transforma a list de Category para uma lista CategoryDTO
+		//return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList()); // transforma a list de Category para uma lista CategoryDTO (desativado par ausar o page)
 		// no final o collect transforma o stream para lista novamente.
+		
+		return list.map(x -> new CategoryDTO(x));  // instancia a lista de page para CategoryDTO
 		
 		/* alternativa para utilizar
 		 * 
