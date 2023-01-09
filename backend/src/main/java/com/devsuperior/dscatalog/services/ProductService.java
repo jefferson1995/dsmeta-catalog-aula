@@ -80,7 +80,7 @@ public class ProductService {
 		}
 	}
 	
-	private void copyDtoToEntity(ProductDTO dto, Product entity) {   //Método auxiliar para adicionar os dados do produto
+	private void copyDtoToEntity(ProductDTO dto, Product entity) {   //Método auxiliar para adicionar os dados do produto ou fazer update
 		// Método irá pegar todos os dados do DTO e inserir na entidade Product
 		
 		entity.setName(dto.getName());
@@ -89,11 +89,11 @@ public class ProductService {
 		entity.setImgUrl(dto.getImgUrl());
 		entity.setPrice(dto.getPrice());
 		
-		// for each para limpar a lista de categorias dentro do productDTO, depois percorre a lista e pega o id e instancia uma nova categoria sem tocar no banco
+		// for each para limpar a lista de categorias dentro do productDTO, depois percorre a lista e pega o id e instanciar uma nova categoria sem tocar no banco
 		entity.getCategories().clear();
 		for(CategoryDTO catDto : dto.getCategories()) {
 			Category category = categoryRepository.getOne(catDto.getId());
-			entity.getCategories().add(category);  //associa a categoria no produto que está sendo atualizado
+			entity.getCategories().add(category);  //associa a categoria no produto que está sendo atualizado ou criado
 		}
 		
 	}
