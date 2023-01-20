@@ -1,7 +1,6 @@
 package com.devsuperior.dscatalog.services;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -9,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +36,10 @@ public class CategoryService {
 	private CategoryRepository repository;   // Com essas configurações o spring trata de injetar uma dependencia valida para CategoryRepository
 	
 	@Transactional(readOnly= true)    // tem a garantia da transação, se faz tudo ou não faz nada, evita lock no banco e melhora a performance (readOnly)
-	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest){  
+	public Page<CategoryDTO> findAllPaged(Pageable pageable){  
 		//List<Category> list =  repository.findAll();  // acessa o repositório e guarda todas informações dentro da lista do tipo Category (Desativado para usar o page)
 		
-		Page<Category> list =  repository.findAll(pageRequest);  // faz a busca paginada
+		Page<Category> list =  repository.findAll(pageable);  // faz a busca paginada
 		/*
 		 * criado uma nova lista para guardar os dados
 		 * For each para percorrer a lista category e adicionar dentro da nova lista dto e já passar como parametro

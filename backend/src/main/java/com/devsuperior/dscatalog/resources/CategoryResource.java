@@ -1,12 +1,10 @@
 package com.devsuperior.dscatalog.resources;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,7 +34,7 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 	private CategoryService service;
 
 	// Endpoint
-
+	/* desativado para usar o Pageable que faz o mesmo procedimento, porém, código mais limpo
 	@GetMapping // Configura o endpoint
 	public ResponseEntity<Page<CategoryDTO>> findAll(
 			// parametros para paginar a requisição
@@ -48,9 +45,10 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 			
 			
 			) {
+			*/
+	@GetMapping
+	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable){
 		
-			PageRequest pageRequest = PageRequest.of(page, linesPerPage,Direction.valueOf(direction), orderBy);
-
 		/*
 		 * List<Category> list = new ArrayList<>();
 		 * 
@@ -61,8 +59,11 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 		// troca pela lista do banco de dados
 
 		//List<CategoryDTO> list = service.findAll(); Desativado para usar o page
-			
-			Page<CategoryDTO> list = service.findAllPaged(pageRequest);
+		
+		
+		//Parametros: page, size, sort	
+		
+		Page<CategoryDTO> list = service.findAllPaged(pageable);
 
 		return ResponseEntity.ok().body(list);
 	}

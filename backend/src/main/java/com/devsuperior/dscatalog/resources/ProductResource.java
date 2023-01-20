@@ -1,11 +1,11 @@
 package com.devsuperior.dscatalog.resources;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,6 +28,8 @@ public class ProductResource {
 	@Autowired
 	private ProductService service;
 
+	
+	/* desativado para usar o Pageable que faz o mesmo procedimento, porém, código mais limpo
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(
 			// parametros para paginar a requisição
@@ -38,10 +39,14 @@ public class ProductResource {
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction
 
 	) {
+	*/
+	
+	@GetMapping
+	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
+	
+		//Parametros: page, size, sort
 
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-
-		Page<ProductDTO> list = service.findAllPaged(pageRequest);
+		Page<ProductDTO> list = service.findAllPaged(pageable);
 
 		return ResponseEntity.ok().body(list);
 	}
