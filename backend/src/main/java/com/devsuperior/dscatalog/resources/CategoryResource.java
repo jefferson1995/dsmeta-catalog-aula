@@ -34,18 +34,6 @@ public class CategoryResource { // Esta é uma classe que pertence o recurso da 
 	private CategoryService service;
 
 	// Endpoint
-	/* desativado para usar o Pageable que faz o mesmo procedimento, porém, código mais limpo
-	@GetMapping // Configura o endpoint
-	public ResponseEntity<Page<CategoryDTO>> findAll(
-			// parametros para paginar a requisição
-			@RequestParam(value = "page", defaultValue = "0") Integer page,                   //Nº das paginas
-			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage, //quantidade de registros por paginas
-			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy,          //ordernar a busca
-			@RequestParam(value = "direction", defaultValue = "ASC") String direction			//ascendente 
-			
-			
-			) {
-			*/
 	@GetMapping
 	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable){
 		
