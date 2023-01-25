@@ -51,7 +51,7 @@ public class ProductDTO implements Serializable{
 	// Quando esse construtor for chamado irá colocar os elementos dentro da lista no inicio desse codigo
 	
 	public ProductDTO(Product entity, Set<Category> categories) {
-		this(entity);
+		this(entity); //Alimenta o construtor que tem o entity
 		categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));  // Para cada categoria nesse construtor, faz a função lambda para adicionar dentro da lista categories (No começo do codigo)
 	}
 
