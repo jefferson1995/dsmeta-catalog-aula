@@ -110,7 +110,7 @@ public class CategoryService {
 		}catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException("Id não encontrado" + id);
 		}
-		catch(DataIntegrityViolationException e) {
+		catch(DataIntegrityViolationException e) { //Lança uma exceção quando tenta apagar uma classe que tem relação com um chavae estrangeira, ela não pode ficar vazia
 			throw new DatabaseException("Violação de integridade");
 		}
 	} 
