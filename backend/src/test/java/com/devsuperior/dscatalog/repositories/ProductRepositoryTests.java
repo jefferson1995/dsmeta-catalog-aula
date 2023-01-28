@@ -27,7 +27,7 @@ public class ProductRepositoryTests {
 	//Vai ser executado antes de cada um dos testes
 	@BeforeEach
 	void setUp() throws Exception {
-		exintingId = 1L;
+		exintingId = 2L;
 		nonExistingId = 1000L;
 		countTotalProducts = 25L;
 		//Não precisa ficar repetindo

@@ -41,7 +41,8 @@ public class ProductServiceTests {
 	private long nonExistingId;
 	private long dependentId;
 	private PageImpl<Product> page; // Tipo concreto que representa uma pagina de dados
-	private Product product; // produto instaciando para simular o comportamento do findall
+	private ProductDTO product;
+	// produto instaciando para simular o comportamento do findall
 	
 	//Vai ser executado antes de cada um dos testes
 	@BeforeEach
@@ -49,7 +50,7 @@ public class ProductServiceTests {
 		existingId = 1L;
 		nonExistingId = 2L;
 		dependentId = 3L;
-		product = Factory.createProduct();
+		Product product = Factory.createProduct();
 		page = new PageImpl<>(List.of(product));
 		
 		//Nesses exemplos é simulado tudo o que ocorre no repository
@@ -69,9 +70,12 @@ public class ProductServiceTests {
 		//Smulando como salvar uma novo objeto
 		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product); //Nesse caso retorna um produto
 		
+		//Simulando como atualizar um novo objeto
+		Mockito.when(repository.getOne(ArgumentMatchers.any())).thenReturn(product);
+		
 		//Simulando quando busca por um id
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product)); //Quando existe id
-		Mockito.when(repository.findById(existingId)).thenReturn(Optional.empty()); //quando não existe um id
+		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty()); //quando não existe um id
 			
 		
 	
@@ -91,6 +95,32 @@ public class ProductServiceTests {
 		
 	}
 	
+	//Atualiza o objeto quando existir um id
+	@Test
+	public void updateShouldReturnProductDTOWhenIdExists() {
+		
+		Assertions.assertNotNull(result);
+	}
+	
+	
+	//Lança uma exception quando o id não existe
+	@Test 
+	public void findByIdShoulResourceNotFoundExceptionWhenIdDoesNotExists() {
+			// Nesse caso vai dispara quando chamar o id, porque ele não existe		
+			Assertions.assertThrows(ResourceNotFoundException.class,() -> {
+				service.findById(nonExistingId);
+			});
+	}
+	
+	//Retorna um produto DTO quando o id existir. 
+	@Test
+	public void findByIdShouldReturnProductDTOWhenIdExists() {
+
+		ProductDTO result = service.findById(existingId);
+		Assertions.assertNotNull(result);
+			
+	}
+	
 	@Test
 	public void findAllPagedShouldReturnPage() {
 		
@@ -103,6 +133,7 @@ public class ProductServiceTests {
 		
 	}
 	
+
 
 	//Teste quando viola a integridade
 	@Test
