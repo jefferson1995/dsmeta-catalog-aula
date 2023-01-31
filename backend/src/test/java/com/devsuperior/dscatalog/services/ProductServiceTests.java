@@ -4,6 +4,8 @@ package com.devsuperior.dscatalog.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.devsuperior.dscatalog.dto.ProductDTO;
+import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
+import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -36,13 +40,21 @@ public class ProductServiceTests {
 	//Quando cria um mock, precisa simular o comportamento dele.
 		@Mock // Cria a classe de forma ilustrativa(de mentira) para fazer a simulação
 		private ProductRepository repository;
+		
+		//simulando o comportamento do Category Repository
+		@Mock
+		private CategoryRepository categoryRepository;
+		
 	
 	private long existingId;
 	private long nonExistingId;
 	private long dependentId;
 	private PageImpl<Product> page; // Tipo concreto que representa uma pagina de dados
-	private ProductDTO product;
+	ProductDTO productDTO;
 	// produto instaciando para simular o comportamento do findall
+	
+	private Category category;
+	
 	
 	//Vai ser executado antes de cada um dos testes
 	@BeforeEach
@@ -52,6 +64,9 @@ public class ProductServiceTests {
 		dependentId = 3L;
 		Product product = Factory.createProduct();
 		page = new PageImpl<>(List.of(product));
+		category = Factory.createCategory();
+		productDTO = Factory.createProductDTO();
+		
 		
 		//Nesses exemplos é simulado tudo o que ocorre no repository
 		
@@ -71,11 +86,16 @@ public class ProductServiceTests {
 		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product); //Nesse caso retorna um produto
 		
 		//Simulando como atualizar um novo objeto
-		Mockito.when(repository.getOne(ArgumentMatchers.any())).thenReturn(product);
+		Mockito.when(repository.getOne(existingId)).thenReturn(product);
+		Mockito.when(repository.getOne(nonExistingId)).thenThrow(EntityNotFoundException.class);
+		
+		//Simulando como atualizar uma categoria do produto
+				Mockito.when(categoryRepository.getOne(existingId)).thenReturn(category);
+				Mockito.when(categoryRepository.getOne(nonExistingId)).thenThrow(EntityNotFoundException.class);
 		
 		//Simulando quando busca por um id
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product)); //Quando existe id
-		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty()); //quando não existe um id
+		Mockito.when(repository.findById(nonExistingId)).thenThrow(ResourceNotFoundException.class); //quando não existe um id
 			
 		
 	
@@ -95,9 +115,25 @@ public class ProductServiceTests {
 		
 	}
 	
+	//Quando vai atualizar , mas não retorna nenhum id
+	
+	@Test 
+	public void updateShoulResourceNotFoundExceptionWhenIdDoesNotExists() {
+			// Nesse caso vai dispara quando chamar o id, porque ele não existe		
+			Assertions.assertThrows(ResourceNotFoundException.class,() -> {
+				service.update(nonExistingId, productDTO);
+			});
+	}
+	
+	
+	
+	
 	//Atualiza o objeto quando existir um id
 	@Test
 	public void updateShouldReturnProductDTOWhenIdExists() {
+		
+		
+		ProductDTO result = service.update(existingId, productDTO);
 		
 		Assertions.assertNotNull(result);
 	}
