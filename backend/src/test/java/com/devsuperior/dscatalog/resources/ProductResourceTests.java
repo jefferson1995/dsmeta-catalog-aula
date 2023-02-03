@@ -28,13 +28,13 @@ public class ProductResourceTests {
 	@MockBean // carrega os contexto parcialmente, mas substitui por um componente mockado
 	private ProductService service;
 	private ProductDTO productDTO;
-	private PageImpl<ProductDTO> page;
+	private PageImpl<ProductDTO> page; // retorna uma pagina de productDTO
 
 	@BeforeEach
 	void setUp() throws Exception {
 
 		productDTO = Factory.createProductDTO();
-		page = new PageImpl<>(List.of(productDTO));
+		page = new PageImpl<>(List.of(productDTO)); // nova lista de productDTO
 
 		when(service.findAllPaged(any())).thenReturn(page); // any = vem do argumentMatchers - significa qualquer
 															// argumento
