@@ -28,23 +28,29 @@ public class ProductResource {
 	@Autowired
 	private ProductService service;
 
-	
-	/* desativado para usar o Pageable que faz o mesmo procedimento, porém, código mais limpo
-	@GetMapping
-	public ResponseEntity<Page<ProductDTO>> findAll(
-			// parametros para paginar a requisição
-			@RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
-			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy,
-			@RequestParam(value = "direction", defaultValue = "ASC") String direction
+	/*
+	 * desativado para usar o Pageable que faz o mesmo procedimento, porém, código
+	 * mais limpo
+	 * 
+	 * @GetMapping public ResponseEntity<Page<ProductDTO>> findAll( // parametros
+	 * para paginar a requisição
+	 * 
+	 * @RequestParam(value = "page", defaultValue = "0") Integer page,
+	 * 
+	 * @RequestParam(value = "linesPerPage", defaultValue = "12") Integer
+	 * linesPerPage,
+	 * 
+	 * @RequestParam(value = "orderBy", defaultValue = "name") String orderBy,
+	 * 
+	 * @RequestParam(value = "direction", defaultValue = "ASC") String direction
+	 * 
+	 * ) {
+	 */
 
-	) {
-	*/
-	
 	@GetMapping
-	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
-	
-		//Parametros: page, size, sort
+	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
+
+		// Parametros: page, size, sort
 
 		Page<ProductDTO> list = service.findAllPaged(pageable);
 
@@ -86,8 +92,8 @@ public class ProductResource {
 /*
  * ResponseEntity encapsula uma resposta http -> A frente -> a lista é o tipo de
  * dado que vai encapsular FindAll = Busca todas categorias dentro da classe
- * Product Na sequencia é instaciada a classe Product e colocado dentro da
- * lista .ok = deixa responder o status 200 que significa que a solicitação foi
+ * Product Na sequencia é instaciada a classe Product e colocado dentro da lista
+ * .ok = deixa responder o status 200 que significa que a solicitação foi
  * realizada com sucesso body = define o corpo da resposta. return = retorna os
  * dados em json (retorna a lista)
  * 
