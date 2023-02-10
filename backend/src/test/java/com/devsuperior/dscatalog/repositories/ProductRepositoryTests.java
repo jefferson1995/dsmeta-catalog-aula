@@ -37,7 +37,7 @@ public class ProductRepositoryTests {
 	@Test
 	public void salveShouldPersistWithAutoincrementWhenIdIsNull() {
 		Product product = Factory.createProduct(); // Produco foi criado dentro da classe factory
-		product.setId(null);
+		product.setId(null); //Salva o id
 		
 		product = repository.save(product);
 		
