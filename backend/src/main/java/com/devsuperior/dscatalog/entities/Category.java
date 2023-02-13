@@ -2,13 +2,16 @@ package com.devsuperior.dscatalog.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -42,7 +45,8 @@ public class Category implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") 
 	private Instant updateAt;
 
-	
+	@ManyToMany(mappedBy = "categories" ) //Faz o mapeamento com base no que está na classe Product
+	private Set<Product> products = new HashSet<>();
 	
 	//construtor sem argumentos
 	public Category() {
@@ -111,6 +115,9 @@ public class Category implements Serializable {
 	// Método de comparação que qualquer objeto java pode ter, precisão de
 	// comparação 100%.
 	
+	public Set<Product> getProducts() {
+		return products;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -123,5 +130,8 @@ public class Category implements Serializable {
 		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
 	}
+
+
+	
 
 }
