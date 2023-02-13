@@ -45,7 +45,7 @@ public class Category implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") 
 	private Instant updateAt;
 
-	@ManyToMany(mappedBy = "categories" ) //Faz o mapeamento com base no que está na classe Product
+	@ManyToMany(mappedBy = "categories" ) //Faz o mapeamento com base no que está na classe Product //Jpa vai no banco e busca os produtos associados
 	private Set<Product> products = new HashSet<>();
 	
 	//construtor sem argumentos
