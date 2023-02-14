@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class User implements Serializable{
 	private String email;
 	private String password; //será criptografado
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER) //Força para toda vez que consultar o user, também vem os roles(perfis)
 	@JoinTable(name = "tb_user_role",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
