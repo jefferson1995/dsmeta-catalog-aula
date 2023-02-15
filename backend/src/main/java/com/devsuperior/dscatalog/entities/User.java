@@ -27,7 +27,7 @@ public class User implements Serializable{
 	private long id;
 	private String firstName;
 	private String lastName;
-	@Column(unique = true)
+	@Column(unique = true) //Deixa essa tabela como unica no banco, não deixa repetir e-mail
 	private String email;
 	private String password; //será criptografado
 	
