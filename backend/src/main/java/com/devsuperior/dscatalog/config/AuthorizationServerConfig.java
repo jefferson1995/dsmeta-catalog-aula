@@ -1,5 +1,7 @@
 package com.devsuperior.dscatalog.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +12,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import com.devsuperior.dscatalog.components.JwtTokenEnhancer;
 
 @Configuration
 @EnableAuthorizationServer //representa o Auth. server    //Checklist do OAuth 2.0
@@ -38,6 +44,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired //Está no websecurityconfig
 	private AuthenticationManager authenticationManage;
 	
+	@Autowired
+	private JwtTokenEnhancer tokenEnhancer;
+	
 	
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -57,9 +66,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override //Informa quem vai autorizar e qual vai ser o formato do token
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		
+		//Para adicionar o id e nome do usuário no token
+		TokenEnhancerChain chain = new TokenEnhancerChain();
+		chain.setTokenEnhancers(Arrays.asList(acessTokenConverter, tokenEnhancer));
+		
 		endpoints.authenticationManager(authenticationManage)  //Processa a autenticação 
 		.tokenStore(tokenStore)     //Objeto responsável para processar o token
-		.accessTokenConverter(acessTokenConverter); //registra a chave
+		.accessTokenConverter(acessTokenConverter) //registra a chave
+		.tokenEnhancer(chain); //para adicionar o chain id e nome usuário
 	}
 
 	
