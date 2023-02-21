@@ -1,9 +1,11 @@
 package com.devsuperior.dscatalog.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,9 +18,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
-@Table(name = "tb_user")
-public class User implements Serializable{
+@Table(name = "tb_user")	//UserDetails -> interface do spring Security
+public class User implements UserDetails, Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -116,6 +122,44 @@ public class User implements Serializable{
 			return false;
 		User other = (User) obj;
 		return id == other.id;
+	}
+
+	//Adicionado os quatros testes da conta do usuário 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// retorna uma coleção dos roles (Perfis do usuário) pega o nome do perfil e instancia no simplegranted
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
+		//collect volta pra lista		
+	}
+
+	@Override
+	public String getUsername() {
+		// retorna o e-mail do usuário 
+		return email;
+	}
+
+	@Override     //Verifica se a conta não está expirada
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override		//Verfiica se a conta não está bloqueada
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override		// Verifica se a senha não está expirada
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override		//Verifica se o usuário está habilitado
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	
