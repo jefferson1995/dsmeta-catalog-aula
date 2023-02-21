@@ -19,9 +19,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	private JwtTokenStore tokenStore; //Pega o token
 	
 	//endpoints publicos - pode adicionar mais rotas caso necessário
-	private static final String[] PUBLIC = {"/oauth/token"};
+	
+	private static final String[] PUBLIC = {"/oauth/token"}; //Precisa ser publico pro usuário logar
 	//Rotas liberadas para adimin e operador
-	private static final String[] OPERATOR_OR_ADMIN = {"/products/**", "/categories/**"};
+	private static final String[] OPERATOR_OR_ADMIN = {"/products/**", "/categories/**"}; //**indica tudo o que vem depois
 	
 	private static final String[] ADMIN = {"/users/**"};
 	
@@ -38,12 +39,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		
 		http.authorizeRequests()
 		.antMatchers(PUBLIC).permitAll() //Com este perfil está liberado para todo mundo
+		
 		.antMatchers(HttpMethod.GET, OPERATOR_OR_ADMIN).permitAll() //Libera para todo mundo somente no método get
+		
 		//No banco é preciso cadastrar "role_admin" mas nessa linha basta passar o "operator que é reconhecido o perfil"
-		.antMatchers(OPERATOR_OR_ADMIN).hasAnyRole("OPERATOR", "ADMIN") //Permite acessar somente quem tem o perfil (role) operator e admin
-		.antMatchers(ADMIN).hasAnyRole("ADMIN") //Somente quem tem o perfil admin
+		.antMatchers(OPERATOR_OR_ADMIN).hasAnyRole("OPERATOR", "ADMIN") //Permite acessar somente quem tem o perfil (role) operator e admin acessa: put/delete/post
+		
+		.antMatchers(ADMIN).hasAnyRole("ADMIN") //Somente quem tem o perfil admin - acessa: put/delete/post
+		
 		.anyRequest().authenticated(); //Quem for acessar qualquer outra rota, precisa estar logado
 	}
+	
+	//antMatchers define as autorizações 
 
 	
 }
