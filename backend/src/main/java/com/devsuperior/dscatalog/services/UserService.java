@@ -121,10 +121,10 @@ public class UserService implements UserDetailsService {
 		User user = repository.findByEmail(username);
 		//Caso não encontre o e-mail do usuário, estoura uma exceção
 		if(user == null) {
-			logger.error("Usuário não encontrado" + username);//Para lançar o log no console da aplicação
+			logger.error("Usuário não encontrado: " + username);//Para lançar o log no console da aplicação
 			throw new UsernameNotFoundException("E-mail não encontrado");
 		}
-		logger.info("User found" + username); //Para lançar o log no console da aplicação
+		logger.info("User found: " + username); //Para lançar o log no console da aplicação
 		return user;
 	}
 

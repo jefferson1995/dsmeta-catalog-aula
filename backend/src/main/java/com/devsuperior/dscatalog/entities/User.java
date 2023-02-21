@@ -159,7 +159,7 @@ public class User implements UserDetails, Serializable{
 	@Override		//Verifica se o usuário está habilitado
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
 	
