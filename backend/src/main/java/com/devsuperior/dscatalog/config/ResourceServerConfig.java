@@ -1,7 +1,11 @@
 package com.devsuperior.dscatalog.config;
 
+
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -15,12 +19,15 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
+	@Autowired //ambiente de execuçaõ da aplicação
+	private Environment env;
+	
 	@Autowired
 	private JwtTokenStore tokenStore; //Pega o token
 	
 	//endpoints publicos - pode adicionar mais rotas caso necessário
 	
-	private static final String[] PUBLIC = {"/oauth/token"}; //Precisa ser publico pro usuário logar
+	private static final String[] PUBLIC = {"/oauth/token", "/h2-console/**"}; //Precisa ser publico pro usuário logar
 	//Rotas liberadas para adimin e operador
 	private static final String[] OPERATOR_OR_ADMIN = {"/products/**", "/categories/**"}; //**indica tudo o que vem depois
 	
@@ -36,6 +43,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	//Usado para configurar as rotas
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
+		
+		//Configuração para liberar o H2
+		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+			http.headers().frameOptions().disable();
+		}
 		
 		http.authorizeRequests()
 		.antMatchers(PUBLIC).permitAll() //Com este perfil está liberado para todo mundo
