@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,14 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer //representa o Auth. server    //Checklist do OAuth 2.0
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter  {
 
+	//Usando para pegar o valor da variável de ambiente
+	@Value("${security.oauth2.client.client-id}")
+	private String clientId;
+	@Value("${security.oauth2.client.client-secret}")
+	private String clientSecret;
+	@Value("${jwt.duration}")
+	private Integer jwtDuration;
+	
 	//OS QUATROS BEANS NECESSÁRIOS 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -39,11 +48,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override  //Define como será a autenticação  -> app credentials 
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
-		.withClient("dscatalog") //define o id da aplicação
-		.secret(passwordEncoder.encode("dscatalog123")) //senha da aplicação
+		.withClient(clientId) //define o id da aplicação
+		.secret(passwordEncoder.encode(clientSecret)) //senha da aplicação
 		.scopes("read", "write") //Para dizer que será um acesso de leitura e escrita
 		.authorizedGrantTypes("password") //varios tipos de acesso login
-		.accessTokenValiditySeconds(86400); //24 horas de validade
+		.accessTokenValiditySeconds(jwtDuration); //24 horas de validade
 	}
 
 	@Override //Informa quem vai autorizar e qual vai ser o formato do token

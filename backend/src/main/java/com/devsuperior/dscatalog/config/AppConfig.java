@@ -1,5 +1,8 @@
 package com.devsuperior.dscatalog.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +14,10 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 public class AppConfig {
 
+	//Usando para pegar o valor da variável de ambiente
+	@Value("${jwt.secret}")
+	private String jwtSecret;
+	
 	@Bean  //Componente do spring para métodos, posso injetar em outras classes
 	//Método para gerar o código de senha do usuário, transforma senha em código
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -22,7 +29,7 @@ public class AppConfig {
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-		tokenConverter.setSigningKey("MY-JWT-SECRET"); //Segredo do token -> registra a chave 
+		tokenConverter.setSigningKey(jwtSecret); //Segredo do token -> registra a chave 
 		return tokenConverter;
 	}
 
