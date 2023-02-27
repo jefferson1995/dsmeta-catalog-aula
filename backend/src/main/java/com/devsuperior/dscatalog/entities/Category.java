@@ -45,7 +45,8 @@ public class Category implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") 
 	private Instant updateAt;
 
-	@ManyToMany(mappedBy = "categories" ) //Faz o mapeamento com base no que está na classe Product //Jpa vai no banco e busca os produtos associados
+	//Jpa vai no banco e busca os produtos associados
+	@ManyToMany(mappedBy = "categories" ) //Faz o mapeamento com base no que já está na classe Product 
 	private Set<Product> products = new HashSet<>();
 	
 	//construtor sem argumentos
@@ -112,13 +113,14 @@ public class Category implements Serializable {
 		return Objects.hash(id);
 	}
 
-	// Método de comparação que qualquer objeto java pode ter, precisão de
-	// comparação 100%.
 	
+	//Método para buscar os produtos que estão associados a esta classe Category
 	public Set<Product> getProducts() {
 		return products;
 	}
 	
+	// Método de comparação que qualquer objeto java pode ter, precisão de
+		// comparação 100%.
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
