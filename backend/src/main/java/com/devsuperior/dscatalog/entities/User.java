@@ -41,7 +41,7 @@ public class User implements UserDetails, Serializable{
 	@JoinTable(name = "tb_user_role",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>(); //User conhece os perfis
+	private Set<Role> roles = new HashSet<>(); //Somente o User conhece os perfis
 	
 	public User() {
 		

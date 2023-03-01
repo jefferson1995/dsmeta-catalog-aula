@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
 	private RoleRepository roleRepository;
 	
 	@Autowired
-	private BCryptPasswordEncoder passwordEncorder; //Para gerar o código
+	private BCryptPasswordEncoder passwordEncorder; //Para gerar o código da senha 
 	
 	
 	
@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	@Transactional
-	public UserDTO insert(UserInsertDTO dto) {
+	public UserDTO insert(UserInsertDTO dto) { //Trocado para UserInsertDTO para poder adicionar a senha
 
 		User entity = new User();
 		copyDtoToEntity(dto, entity);
@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public UserDTO update(Long id, UserUpdateDTO dto) { //Trocado para o UserUpdateDTO para usar a anotation UserUpdateValid
 		try {
-			User entity = repository.getOne(id);
+			User entity = repository.getOne(id); //instacia uma unidade monitorada (temporário)
 			copyDtoToEntity(dto, entity);
 			entity = repository.save(entity);
 

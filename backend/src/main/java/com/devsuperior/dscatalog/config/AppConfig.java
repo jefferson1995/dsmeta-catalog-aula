@@ -21,7 +21,7 @@ public class AppConfig {
 	@Bean  //Componente do spring para métodos, posso injetar em outras classes
 	//Método para gerar o código de senha do usuário, transforma senha em código
 	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(); 
 	}
 	
 	//São dois objetos capazer de acessar um token jwt -> codifica -> cria  e faz a leitura

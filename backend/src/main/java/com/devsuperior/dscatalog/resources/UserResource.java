@@ -69,7 +69,8 @@ public class UserResource {
 
 	@PostMapping                             //valid para atender as anotações do DTO
 	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
-		UserDTO newDTO = service.insert(dto);
+		//Recebe o insertDTO, porém, é retornado um UserDTO
+		UserDTO newDTO = service.insert(dto); //Para realizar o retorno UserDTO
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newDTO.getId()).toUri();
 
 		return ResponseEntity.created(uri).body(newDTO);
@@ -77,7 +78,7 @@ public class UserResource {
 
 	@PutMapping(value = "/{id}") // método indepotente
 	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) { //Atualizado para usar a anotation UserUpdateValid
-		UserDTO newDto = service.update(id, dto); //Precisa converter para o UserDTO
+		UserDTO newDto = service.update(id, dto); //Precisa converter para o UserDTO igual no insert
 		return ResponseEntity.ok().body(newDto);
 	}
 

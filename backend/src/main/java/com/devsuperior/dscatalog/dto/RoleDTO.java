@@ -22,7 +22,7 @@ public class RoleDTO implements Serializable {
 		this.authority = authority;
 	}
 	
-	//Recebe o role como argumento
+	//Recebe o role como argumento e usado para adicionar os dados dentro do userDTO
 	public RoleDTO(Role role) {
 		super();
 		id = role.getId();

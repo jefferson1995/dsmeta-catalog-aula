@@ -21,12 +21,15 @@ public class UserDTO implements Serializable {
 	@Email(message = "Favor entrar com um e-mail válido")  //Obriga a informar um e-mail
 	private String email;
 	
+	//Para transitar os dados do usuário e as permissões dele
 	Set<RoleDTO> roles = new HashSet<>();
 	
 	
 	public UserDTO() {
 		
 	}
+	
+	//Não será necessário ter a senha, porque será aplicada em um DTO separado 
 
 	public UserDTO(long id, String firstName, String lastName, String email, String password) {
 		
@@ -39,6 +42,7 @@ public class UserDTO implements Serializable {
 		
 	}
 	
+	//Construtor para adicionar os dados da classe entity no DTO
 	public UserDTO(User entity) {
 	
 		//Não precisa usar o this, porque o paramêtro é diferente
@@ -85,6 +89,7 @@ public class UserDTO implements Serializable {
 		this.email = email;
 	}
 
+	//Somente o getRoles para buscar as permissões vinculadas 
 	public Set<RoleDTO> getRoles() {
 		return roles;
 	}
