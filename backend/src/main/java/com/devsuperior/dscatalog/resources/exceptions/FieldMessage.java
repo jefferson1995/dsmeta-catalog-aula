@@ -7,6 +7,7 @@ public class FieldMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	//Carrega os campos e a mensagem
 	private String fieldName;
 	private String message;
 	

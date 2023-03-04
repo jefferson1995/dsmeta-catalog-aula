@@ -12,7 +12,7 @@ public class ValidationError extends StandardError {
 	//Não precisa de construtor porque a classe está herdando
 	private List<FieldMessage> errors = new ArrayList<>();
 
-	//Pega somente o getErrors
+	//funcionalidade para criar os getters and setters Pega somente o getErrors
 	public List<FieldMessage> getErrors() {
 		return errors;
 	}

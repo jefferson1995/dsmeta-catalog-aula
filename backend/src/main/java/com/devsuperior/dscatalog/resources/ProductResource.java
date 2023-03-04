@@ -67,6 +67,7 @@ public class ProductResource {
 
 	@PostMapping								//valid para atender as anotações do DTO
 	public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
+		//Se não passar no valid -> a requisição não é feita no service
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
 

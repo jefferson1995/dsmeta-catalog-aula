@@ -12,13 +12,13 @@ import com.devsuperior.dscatalog.entities.User;
 import com.devsuperior.dscatalog.repositories.UserRepository;
 import com.devsuperior.dscatalog.resources.exceptions.FieldMessage;
 
-//Classe usada para implantar toda lógica da validação (Igual uma regra de negócio)
+//Classe usada para implantar toda lógica da validação (Igual uma regra de negócio) e qual classe vai receber a anotação criada (UserInsertDTO)
 public class UserInsertValidator implements ConstraintValidator<UserInsertValid, UserInsertDTO> { //interface do javax validation
 										//UserInsertDTO é o tipo da classe que vai receber a anotation
 	
 	@Autowired UserRepository repository;
 	
-	@Override
+	@Override //Posso colocar alguma lógica quando for iniciar o objeto
 	public void initialize(UserInsertValid ann) {
 	}
 
@@ -36,6 +36,7 @@ public class UserInsertValidator implements ConstraintValidator<UserInsertValid,
 		
 		//Insere a lista dentro do validation (Insere os erros)
 		for (FieldMessage e : list) {
+			//Adicionar no bens validation o erro encontrado
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getFieldName())
 					.addConstraintViolation();

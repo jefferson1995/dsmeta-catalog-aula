@@ -20,7 +20,7 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid,
 										//UserInsertDTO é o tipo da classe que vai receber a anotation
 	
 	@Autowired
-	private HttpServletRequest request;
+	private HttpServletRequest request; //Guarda as informações da requisição
 	
 	@Autowired UserRepository repository;
 	
@@ -33,8 +33,9 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid,
 		
 		//Para não ficar apontando o erro amarelo
 		@SuppressWarnings("unchecked")				//Map Pega o id e transfora em string
+		//                 ID       valor
 		var uriVars = (Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE); //Pega os atributos da url
-		long userId = Long.parseLong(uriVars.get("id"));
+		long userId = Long.parseLong(uriVars.get("id")); //Vem como string e converte para long
 		
 		List<FieldMessage> list = new ArrayList<>(); //Lista vazia
 		
@@ -42,6 +43,7 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid,
 		
 		//Cria toda validação para verificar se já existe o e-mail no banco e insere no errors validation
 		User user = repository.findByEmail(dto.getEmail());
+		//Se o id for diferente do user atual, estoura o erro
 		if(user != null && userId != user.getId()) { //se o usuário for diferente do que quero atualizar estoura a msg de erro
 			list.add(new FieldMessage("email", "Email já existe" ));
 		}

@@ -21,7 +21,7 @@ public class ProductDTO implements Serializable{
 	
 	//Existe estas anotações porque a requisição é feira no DTO -> depois precisa colocar o @Valid no resources
 	@Size(min = 5, max =60, message = "Deve ter entre 5 e 60 caracteres") //Faz a validação e manda msg
-	@NotBlank(message = "Campo obrigatório") //Tornar o campo obrigatório
+	@NotBlank(message = "Campo obrigatório") //Tornar o campo obrigatório mesmo se colocar aspas vazia " "
 	private String name;
 	private String description;
 	@Positive(message = "O preço deve ser um valor positivo") //Obriga a ser um valor positivo
