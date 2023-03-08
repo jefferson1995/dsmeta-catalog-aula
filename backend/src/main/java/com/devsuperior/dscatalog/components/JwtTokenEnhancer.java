@@ -30,12 +30,14 @@ public class JwtTokenEnhancer implements TokenEnhancer{
 		map.put("userFirstName", user.getFirstName());
 		map.put("userId", user.getId());
 		
-		//Para adicionar no token
+		//Para adicionar no token		//troca o tipo da classe
 		DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken; 
 		token.setAdditionalInformation(map); 
 		
 		return token;
 	}
+	
+	//Depois instanciar na classe AuthorizationServerConfig
 
 	
 }

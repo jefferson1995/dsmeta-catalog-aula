@@ -28,7 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	//endpoints publicos - pode adicionar mais rotas caso necessário
 	
 	private static final String[] PUBLIC = {"/oauth/token", "/h2-console/**"}; //Precisa ser publico pro usuário logar
-	//Rotas liberadas para adimin e operador
+	//Rotas liberadas para adimin e operador 
 	private static final String[] OPERATOR_OR_ADMIN = {"/products/**", "/categories/**"}; //**indica tudo o que vem depois
 	
 	private static final String[] ADMIN = {"/users/**"};
@@ -46,13 +46,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		
 		//Configuração para liberar o H2
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
-			http.headers().frameOptions().disable();
+			http.headers().frameOptions().disable(); //Para liberar as opções do H2
 		}
 		
 		http.authorizeRequests()
 		.antMatchers(PUBLIC).permitAll() //Com este perfil está liberado para todo mundo
-		
-		.antMatchers(HttpMethod.GET, OPERATOR_OR_ADMIN).permitAll() //Libera para todo mundo somente no método get
+		//Libera para todo mundo somente no método get -  
+		.antMatchers(HttpMethod.GET, OPERATOR_OR_ADMIN).permitAll() // <- operador_or_admin -> libera todas permissões get/put/delete
 		
 		//No banco é preciso cadastrar "role_admin" mas nessa linha basta passar o "operator que é reconhecido o perfil"
 		.antMatchers(OPERATOR_OR_ADMIN).hasAnyRole("OPERATOR", "ADMIN") //Permite acessar somente quem tem o perfil (role) operator e admin acessa: put/delete/post

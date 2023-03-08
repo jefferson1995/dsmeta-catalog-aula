@@ -127,9 +127,10 @@ public class User implements UserDetails, Serializable{
 	//Adicionado os quatros testes da conta do usuário 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// retorna uma coleção dos roles (Perfis do usuário) pega o nome do perfil e instancia no simplegranted
+		// retorna uma coleção dos roles (Perfis do usuário já esta na classe) pega o nome do perfil e instancia no simplegranted
 		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
-		//collect volta pra lista		
+		//collect volta pra lista 
+		//Instancia o tipo de pergil para classe SimpleGrantedAuthority
 	}
 
 	@Override

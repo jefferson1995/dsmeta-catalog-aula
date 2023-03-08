@@ -45,7 +45,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private AuthenticationManager authenticationManage;
 	
 	@Autowired
-	private JwtTokenEnhancer tokenEnhancer;
+	private JwtTokenEnhancer tokenEnhancer; //Para adicionar informações no token ex. nome e id do usuário
 	
 	
 	@Override
@@ -56,7 +56,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override  //Define como será a autenticação  -> app credentials 
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory()
+		clients.inMemory() //Para fazer o processo em memória 
 		.withClient(clientId) //define o id da aplicação
 		.secret(passwordEncoder.encode(clientSecret)) //senha da aplicação
 		.scopes("read", "write") //Para dizer que será um acesso de leitura e escrita
@@ -71,9 +71,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		TokenEnhancerChain chain = new TokenEnhancerChain();
 		chain.setTokenEnhancers(Arrays.asList(acessTokenConverter, tokenEnhancer));
 		
-		endpoints.authenticationManager(authenticationManage)  //Processa a autenticação 
-		.tokenStore(tokenStore)     //Objeto responsável para processar o token
-		.accessTokenConverter(acessTokenConverter) //registra a chave
+		endpoints.authenticationManager(authenticationManage)  //Processa a autenticação -> configurado na classe websecuityconfig
+		.tokenStore(tokenStore)     //Objeto responsável para processar o token 
+		.accessTokenConverter(acessTokenConverter) //registra a chave -> definido na classe appConfig
 		.tokenEnhancer(chain); //para adicionar o chain id e nome usuário
 	}
 
