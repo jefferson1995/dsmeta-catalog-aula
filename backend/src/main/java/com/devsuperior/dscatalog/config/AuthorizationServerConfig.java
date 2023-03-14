@@ -19,15 +19,18 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import com.devsuperior.dscatalog.components.JwtTokenEnhancer;
 
+
 @Configuration
 @EnableAuthorizationServer //representa o Auth. server    //Checklist do OAuth 2.0
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter  {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	//Usando para pegar o valor da variável de ambiente
 	@Value("${security.oauth2.client.client-id}")
 	private String clientId;
+	
 	@Value("${security.oauth2.client.client-secret}")
 	private String clientSecret;
+	
 	@Value("${jwt.duration}")
 	private Integer jwtDuration;
 	
@@ -36,25 +39,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private JwtAccessTokenConverter acessTokenConverter;
+	private JwtAccessTokenConverter accessTokenConverter;
 	
 	@Autowired
 	private JwtTokenStore tokenStore;
 	
 	@Autowired //Está no websecurityconfig
-	private AuthenticationManager authenticationManage;
+	private AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private JwtTokenEnhancer tokenEnhancer; //Para adicionar informações no token ex. nome e id do usuário
-	
-	
+
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		
 		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
 	}
 
-	@Override  //Define como será a autenticação  -> app credentials 
+	@Override //Define como será a autenticação  -> app credentials 
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory() //Para fazer o processo em memória 
 		.withClient(clientId) //define o id da aplicação
@@ -66,17 +67,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override //Informa quem vai autorizar e qual vai ser o formato do token
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		
+
 		//Para adicionar o id e nome do usuário no token
 		TokenEnhancerChain chain = new TokenEnhancerChain();
-		chain.setTokenEnhancers(Arrays.asList(acessTokenConverter, tokenEnhancer));
+		chain.setTokenEnhancers(Arrays.asList(accessTokenConverter, tokenEnhancer));
 		
-		endpoints.authenticationManager(authenticationManage)  //Processa a autenticação -> configurado na classe websecuityconfig
+		endpoints.authenticationManager(authenticationManager)  //Processa a autenticação -> configurado na classe websecuityconfig
 		.tokenStore(tokenStore)     //Objeto responsável para processar o token 
-		.accessTokenConverter(acessTokenConverter) //registra a chave -> definido na classe appConfig
+		.accessTokenConverter(accessTokenConverter) //registra a chave -> definido na classe appConfig
 		.tokenEnhancer(chain); //para adicionar o chain id e nome usuário
 	}
-
-	
-	
 }
+
+
+
+
+
+
+
+
