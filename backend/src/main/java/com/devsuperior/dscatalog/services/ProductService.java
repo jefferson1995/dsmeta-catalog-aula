@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.services;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -30,11 +31,12 @@ public class ProductService {
 	private CategoryRepository categoryRepository; //para utilizar no metodo copyDtoToEntity
 	
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(Pageable pageable) {
+	public Page<ProductDTO> find(Long categoryId, Pageable pageable) {
 
-		Page<Product> list = repository.findAll(pageable);
-
-		return list.map(x -> new ProductDTO(x));
+		Category category = (categoryId == 0) ? null : categoryRepository.getOne(categoryId);
+		Page<Product> page = repository.find(category, pageable);
+		
+		return page.map(x -> new ProductDTO(x));
 
 	}
 

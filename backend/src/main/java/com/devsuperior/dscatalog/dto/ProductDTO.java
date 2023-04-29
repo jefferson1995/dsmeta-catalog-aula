@@ -57,6 +57,8 @@ public class ProductDTO implements Serializable{
 		this.price = entity.getPrice();
 		this.imgUrl = entity.getImgUrl();
 		this.date = entity.getDate();
+		entity.getCategories().forEach(cat -> this.categories.add(new CategoryDTO(cat)));
+		 
 	}
 	
 	//Construtor para receber as categorias (Sobrecarga mesmo contrutor mas com parametros difrentes)
@@ -64,7 +66,8 @@ public class ProductDTO implements Serializable{
 	
 	public ProductDTO(Product entity, Set<Category> categories) {
 		this(entity); //Alimenta o construtor que tem o entity
-		categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));  // Para cada categoria nesse construtor, faz a função lambda para adicionar dentro da lista categories (No começo do codigo)
+		 // Para cada categoria nesse construtor, faz a função lambda para adicionar dentro da lista categories (No começo do codigo)
+		categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
 	}
 
 	public Long getId() {
