@@ -22,7 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	//JPQL          //DISTINTCT para não repetir os produtos
 	@Query("SELECT DISTINCT obj FROM Product obj INNER JOIN obj.categories cats WHERE "
-			+ "(:category IS NULL OR  :category IN cats)") //Se for null ou com valor, irá retornar todos produtos
-	Page<Product> find(Category category, Pageable pageable);
+			+ "(:category IS NULL OR  :category IN cats) AND "     //Se for null ou com valor, irá retornar todos produtos
+			+ "(LOWER(obj.name) LIKE LOWER(CONCAT('%',:name,'%')))")
+	Page<Product> find(Category category, String name, Pageable pageable);
 	
 }

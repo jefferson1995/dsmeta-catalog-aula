@@ -31,10 +31,10 @@ public class ProductService {
 	private CategoryRepository categoryRepository; //para utilizar no metodo copyDtoToEntity
 	
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> find(Long categoryId, Pageable pageable) {
+	public Page<ProductDTO> find(Long categoryId, String name, Pageable pageable) {
 
 		Category category = (categoryId == 0) ? null : categoryRepository.getOne(categoryId);
-		Page<Product> page = repository.find(category, pageable);
+		Page<Product> page = repository.find(category, name , pageable);
 		
 		return page.map(x -> new ProductDTO(x));
 
