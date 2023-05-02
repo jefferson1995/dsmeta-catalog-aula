@@ -65,22 +65,22 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		
 		.anyRequest().authenticated(); //Quem for acessar qualquer outra rota, precisa estar logado
 		
-		http.cors().configurationSource(corsConfigurationSource());
+		http.cors().configurationSource(corsConfigurationSource()); //configuração do cors - vai aceitar configuração de outros hots
 		
 		//antMatchers define as autorizações 
 	}
 	
-	//Configuração para liberar que o backend seja acessado por outros routs
+	//Configuração para liberar que o backend seja acessado por outros HOTS
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 
 		String[] origins = corsOrigins.split(",");
 
 	    CorsConfiguration corsConfig = new CorsConfiguration();
-	    corsConfig.setAllowedOriginPatterns(Arrays.asList(origins));
-	    corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH"));
-	    corsConfig.setAllowCredentials(true);
-	    corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+	    corsConfig.setAllowedOriginPatterns(Arrays.asList(origins)); //Onde posso colocar o dominio futuramente
+	    corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH")); //Métodos para ser liberados
+	    corsConfig.setAllowCredentials(true); //Permitir credenciais 
+	    corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); //Selecionar os headers permitidos
 	 
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", corsConfig);
@@ -90,10 +90,15 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	FilterRegistrationBean<CorsFilter> corsFilter() {
 	    FilterRegistrationBean<CorsFilter> bean
-	            = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource()));
-	    bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+	            = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource())); //registra a configuração
+	    bean.setOrder(Ordered.HIGHEST_PRECEDENCE); //passando esses parametros - fica registrado nos filtros da aplicação
 	    return bean;
 	}
+	
+	
+	
+	
+
 }
 
 
