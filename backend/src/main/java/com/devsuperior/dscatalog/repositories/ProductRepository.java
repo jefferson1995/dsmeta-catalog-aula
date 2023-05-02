@@ -1,5 +1,7 @@
 package com.devsuperior.dscatalog.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,10 +22,13 @@ import com.devsuperior.dscatalog.entities.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+	
 	//JPQL          //DISTINTCT para não repetir os produtos
 	@Query("SELECT DISTINCT obj FROM Product obj INNER JOIN obj.categories cats WHERE "
-			+ "(:category IS NULL OR  :category IN cats) AND "     //Se for null ou com valor, irá retornar todos produtos
+			+ "(COALESCE(:categories) IS NULL OR  cats IN :categories) AND "     //Se for null ou com valor, irá retornar todos produtos
 			+ "(LOWER(obj.name) LIKE LOWER(CONCAT('%',:name,'%')))")
-	Page<Product> find(Category category, String name, Pageable pageable);
+	Page<Product> find(	List<Category> categories, String name, Pageable pageable);
+	
+	
 	
 }
