@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
+import static org.mockito.ArgumentMatchers.any;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -78,12 +79,12 @@ public class ProductServiceTests {
 		 * No final retorna um page (vai ser um objeto de pagina "PageImpl e uma lista dentro com apenas um produto"
 		 */
 		
-		Mockito.when(repository.findAll((Pageable)ArgumentMatchers.any())).thenReturn(page);
+		Mockito.when(repository.findAll((Pageable)any())).thenReturn(page);
 		
 		
 		
 		//Smulando como salvar uma novo objeto
-		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product); //Nesse caso retorna um produto
+		Mockito.when(repository.save(any())).thenReturn(product); //Nesse caso retorna um produto
 		
 		//Simulando como atualizar um novo objeto
 		Mockito.when(repository.getOne(existingId)).thenReturn(product);
@@ -98,7 +99,7 @@ public class ProductServiceTests {
 		Mockito.when(repository.findById(nonExistingId)).thenThrow(ResourceNotFoundException.class); //quando não existe um id
 			
 		
-	
+		Mockito.when(repository.find(any(), any(), any())).thenReturn(page);
 		
 		
 		//casos que não retornam nada
@@ -162,10 +163,9 @@ public class ProductServiceTests {
 		
 		Pageable pageable = PageRequest.of(0, 10);
 		
-		Page<ProductDTO> result = service.findAllPaged(pageable);
+		Page<ProductDTO> result = service.find(0L,"", pageable);
 		
 		Assertions.assertNotNull(result);
-		Mockito.verify(repository).findAll(pageable);
 		
 	}
 	

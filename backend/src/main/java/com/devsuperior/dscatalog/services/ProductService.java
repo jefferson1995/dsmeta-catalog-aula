@@ -36,8 +36,9 @@ public class ProductService {
                                                                //Adiciona dentro da list (asList)
 		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getOne(categoryId));
 		Page<Product> page = repository.find(categories, name , pageable);
+		repository.findProductsWithCategories(page.getContent()); //converte a page para lista
 		
-		return page.map(x -> new ProductDTO(x));
+		return page.map(x -> new ProductDTO(x, x.getCategories()));
 
 	}
 

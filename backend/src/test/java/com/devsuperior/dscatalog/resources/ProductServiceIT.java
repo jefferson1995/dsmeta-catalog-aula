@@ -42,7 +42,7 @@ public class ProductServiceIT {
 	@Test
 	public void findAllPagedReturnSortedOrderedPageWhenSortByName() {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("name")); // Retorna uma página ordenada por nome
-		Page<ProductDTO> result = service.findAllPaged(pageRequest);
+		Page<ProductDTO> result = service.find(0L,"",pageRequest);
 
 		Assertions.assertFalse(result.isEmpty()); // Verifique se a página não está vazia
 		Assertions.assertEquals("Macbook Pro", result.getContent().get(0).getName()); // Verifica se é o primeiro produto ordenado
@@ -55,7 +55,7 @@ public class ProductServiceIT {
 	@Test
 	public void findAllPagedReturnEmptyPageDoesNotExists() {
 		PageRequest pageRequest = PageRequest.of(50, 10);
-		Page<ProductDTO> result = service.findAllPaged(pageRequest);
+		Page<ProductDTO> result = service.find(0L,"",pageRequest);
 
 		Assertions.assertTrue(result.isEmpty()); // Verifique se a página não está vazia
 
@@ -65,7 +65,7 @@ public class ProductServiceIT {
 	@Test
 	public void findAllPagedReturnPage0Size10() {
 		PageRequest pageRequest = PageRequest.of(0, 10);
-		Page<ProductDTO> result = service.findAllPaged(pageRequest);
+		Page<ProductDTO> result = service.find(0L,"",pageRequest);
 
 		Assertions.assertFalse(result.isEmpty()); // Verifique se a página não está vazia
 		Assertions.assertEquals(0, result.getNumber()); // Verifica se a página é igual a zero
