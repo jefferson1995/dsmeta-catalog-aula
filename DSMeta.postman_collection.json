@@ -1,0 +1,60 @@
+{
+	"info": {
+		"_postman_id": "0fa4a73a-dbaa-4434-8494-b4d5d2872e5c",
+		"name": "DSMeta",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24512307"
+	},
+	"item": [
+		{
+			"name": "Sales",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sales?minDate=2021-11-01&maxDate=2021-12-31",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sales"
+					],
+					"query": [
+						{
+							"key": "minDate",
+							"value": "2021-11-01"
+						},
+						{
+							"key": "maxDate",
+							"value": "2021-12-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "notification",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sales/53/notification",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sales",
+						"53",
+						"notification"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
