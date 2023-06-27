@@ -37,6 +37,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	private JwtTokenStore tokenStore; 
 	
+	
 	//endpoints publicos - pode adicionar mais rotas caso necessário
 	
 		private static final String[] PUBLIC = {"/oauth/token", "/h2-console/**"}; //Precisa ser publico pro usuário logar
